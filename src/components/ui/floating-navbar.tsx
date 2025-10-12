@@ -39,7 +39,7 @@ export const FloatingNav = ({
           href="/"
           className={cn(
             "flex items-center justify-center size-8 rounded-md text-2xl font-bold shadow-md transition-all duration-500 ease-in-out",
-            "bg-white text-black hover:bg-black hover:text-white"
+            "bg-white text-black "
           )}
         >
           P

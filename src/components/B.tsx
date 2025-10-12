@@ -148,7 +148,7 @@ export const BackgroundCellAnimation = () => {
       >
         <HoverBorderGradient containerClassName="rounded-full" duration={1.2}>
           <motion.div
-            whileHover={{ scale: 2.05 }}
+            whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.98 }}
             transition={{
               type: 'spring',
