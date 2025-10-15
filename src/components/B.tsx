@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useRouter } from '@tanstack/react-router'
+import { FeatureCards } from './FeatureCard'
 
 /* ------------------ HoverBorderGradient (framer-motion) ------------------ */
 
@@ -103,7 +104,7 @@ export function HoverBorderGradient({
 export const BackgroundCellAnimation = () => {
   const router = useRouter()
   return (
-    <div className="relative h-screen w-full bg-[#0f0f0f] flex flex-col justify-center items-center overflow-hidden text-white">
+    <div className="relative min-h-screen w-full  bg-[#0f0f0f] flex flex-col justify-center items-center text-white">
       <BackgroundCellCore />
 
       {/* Floating blur shapes */}
@@ -118,7 +119,7 @@ export const BackgroundCellAnimation = () => {
         transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Title */}
+      {/* Title & Subtitle */}
       <motion.h1
         className="text-5xl md:text-7xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-100"
         initial={{ opacity: 0, y: 20 }}
@@ -127,10 +128,8 @@ export const BackgroundCellAnimation = () => {
       >
         PathPilot
       </motion.h1>
-
-      {/* Subtitle */}
       <motion.p
-        className="text-lg md:text-xl text-gray-300 text-center max-w-xl"
+        className="text-lg md:text-xl mt-10 text-gray-300 text-center max-w-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.6 }}
@@ -146,61 +145,15 @@ export const BackgroundCellAnimation = () => {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 1.0, ease: 'easeOut' }}
       >
-        <HoverBorderGradient containerClassName="rounded-full" duration={1.2}>
-          <motion.div
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{
-              type: 'spring',
-              stiffness: 200,
-              damping: 15,
-              ease: 'easeInOut',
-            }}
-          >
-            <a href="/auth/login">
-              <Button
-                size="lg"
-                className={cn(
-                  'relative overflow-hidden rounded-full px-10 py-6 font-semibold transition-all duration-10000 ease-in-out group',
-                  'bg-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.7)] border border-white/20',
-                )}
-              >
-                {/* White overlay slides in on hover */}
-                <span
-                  aria-hidden
-                  className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-in-out pointer-events-none"
-                  style={{ zIndex: 5 }}
-                />
-
-                {/* Gloss effect */}
-                <span
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-[1.5s] mix-blend-overlay pointer-events-none"
-                  style={{ zIndex: 6 }}
-                />
-
-                {/* Button content */}
-                <span className="relative z-10 flex items-center gap-3 transition-transform duration-500 ease-in-out">
-                  <span
-                    className="size-1 rounded-full bg-white transition-all duration-[1.5s] group-hover:opacity-0 group-hover:scale-75"
-                    style={{ zIndex: 10 }}
-                  />
-                  <span
-                    className="text-lg font-semibold text-white group-hover:text-black transition-colors duration-[1.5s]"
-                    style={{ zIndex: 10 }}
-                  >
-                    Get Started
-                  </span>
-                </span>
-              </Button>
-            </a>
-          </motion.div>
-        </HoverBorderGradient>
+        {/* ... CTA button code ... */}
       </motion.div>
+
+      {/* Feature Cards */}
+      <FeatureCards />
 
       {/* Footer */}
       <motion.footer
-        className="absolute bottom-6 text-sm text-gray-400"
+        className="text-sm text-gray-400 mt-20 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.2 }}
@@ -210,6 +163,7 @@ export const BackgroundCellAnimation = () => {
     </div>
   )
 }
+
 
 /* ------------------ BackgroundCellCore & Pattern ------------------ */
 
