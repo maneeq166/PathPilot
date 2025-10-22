@@ -5,6 +5,8 @@ import { useRouter } from '@tanstack/react-router'
 import { FeatureCards } from './FeatureCard'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { StickyScrollRevealDemo } from './StickyScroll'
+
 
 
 /* ------------------ HoverBorderGradient (framer-motion) ------------------ */
@@ -173,7 +175,7 @@ export const BackgroundCellAnimation = () => {
         {/* Feature Cards */}
         <FeatureCards />
 
-        {/* <StickyScrollRevealDemo/> */}
+        <StickyScrollRevealDemo/>
 
         {/* Footer */}
         <motion.footer
