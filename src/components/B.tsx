@@ -1,10 +1,11 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { useRouter } from '@tanstack/react-router'
 import { FeatureCards } from './FeatureCard'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+
 
 /* ------------------ HoverBorderGradient (framer-motion) ------------------ */
 
@@ -100,11 +101,12 @@ export function HoverBorderGradient({
 }
 
 /* ------------------ Main component ------------------ */
-
 export const BackgroundCellAnimation = () => {
   const router = useRouter()
+
   return (
-    <div className="relative min-h-screen w-full  bg-[#0f0f0f] flex flex-col justify-center items-center text-white">
+    <div className="relative min-h-screen w-full bg-[#0f0f0f] flex flex-col items-center text-white overflow-hidden">
+      {/* Background cells remain exactly the same */}
       <BackgroundCellCore />
 
       {/* Floating blur shapes */}
@@ -119,51 +121,73 @@ export const BackgroundCellAnimation = () => {
         transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Title & Subtitle */}
-      <motion.h1
-        className="text-5xl md:text-7xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-100"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.3 }}
-      >
-        PathPilot
-      </motion.h1>
-      <motion.p
-        className="text-lg md:text-xl mt-10 text-gray-300 text-center max-w-xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.6 }}
-      >
-        Unlock AI-powered resume insights, job matching, and interview feedback
-        — all in one place.
-      </motion.p>
+      {/* Foreground content shifted lower */}
+      <div className="relative z-20 flex flex-col justify-center items-center pt-55">
+        <motion.h1
+          className="text-5xl md:text-7xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          PathPilot
+        </motion.h1>
 
-      {/* Call to Action Button */}
-      <motion.div
-        className="mt-10"
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1.0, ease: 'easeOut' }}
-      >
-        {/* ... CTA button code ... */}
-      </motion.div>
+        <motion.p
+          className="text-lg md:text-xl mt-10 text-gray-300 text-center max-w-xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+        >
+          Unlock AI-powered resume insights, job matching, and interview
+          feedback — all in one place.
+        </motion.p>
 
-      {/* Feature Cards */}
-      <FeatureCards />
+        {/* CTA Button (kept exactly as provided) */}
+        <motion.div
+          className="mt-10"
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.0, ease: 'easeOut' }}
+        >
+          <HoverBorderGradient containerClassName="rounded-full" duration={1.2}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            >
+              <a href="/auth/login" aria-label="Get started">
+                <Button
+                  size="lg"
+                  className={cn(
+                    'relative overflow-hidden rounded-full px-8 py-4 font-semibold transition-all group',
+                    'bg-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.7)] border border-white/20',
+                  )}
+                >
+                  <span className="relative z-10">Get Started</span>
+                </Button>
+              </a>
+            </motion.div>
+          </HoverBorderGradient>
+        </motion.div>
 
-      {/* Footer */}
-      <motion.footer
-        className="text-sm text-gray-400 mt-20 mb-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        © {new Date().getFullYear()} PathPilot — All rights reserved.
-      </motion.footer>
+        {/* Feature Cards */}
+        <FeatureCards />
+
+        {/* <StickyScrollRevealDemo/> */}
+
+        {/* Footer */}
+        <motion.footer
+          className="text-sm text-gray-400 mt-20 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.2 }}
+        >
+          © {new Date().getFullYear()} PathPilot — All rights reserved.
+        </motion.footer>
+      </div>
     </div>
   )
 }
-
 
 /* ------------------ BackgroundCellCore & Pattern ------------------ */
 
