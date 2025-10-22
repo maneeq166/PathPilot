@@ -1,108 +1,142 @@
-'use client'
-import { motion } from 'framer-motion'
-import { createFileRoute } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Eye, EyeOff } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useState } from 'react'
+"use client";
+import { createFileRoute } from "@tanstack/react-router";
+import React from "react";
+import {
+  IconBrandGithub,
+  IconBrandGoogle,
+  IconBrandOnlyfans,
+} from "@tabler/icons-react";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute('/auth/register')({
+export const Route = createFileRoute("/auth/register")({
   component: Register,
-})
+});
 
 function Register() {
-  const [showPassword, setShowPassword] = useState(false)
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form submitted");
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, ease: 'easeOut' }}
-      className="flex items-center justify-center min-h-screen bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-white"
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className={cn(
-          'relative bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900',
-          'p-6 rounded-3xl shadow-[0_0_50px_rgba(255,255,255,0.06)]',
-          'border border-white/5 w-full max-w-md backdrop-blur-sm'
-        )}
-      >
-        {/* Glow border animation */}
-        <motion.div
-          className="absolute inset-0 rounded-3xl bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-0 pointer-events-none"
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: 'easeInOut' }}
-        />
+     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-white">
+    <div className="mt-24 mx-auto w-full max-w-md rounded-2xl bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 p-8 shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-zinc-800">
+      <h2 className="text-2xl font-semibold text-center text-white tracking-tight">
+        Welcome to Aceternity
+      </h2>
+      <p className="mt-2 text-center text-sm text-zinc-400">
+        Create your account to continue your journey.
+      </p>
 
-        <h2 className="text-3xl font-semibold mb-5 text-center tracking-tight text-white/90">
-          Create an Account
-        </h2>
-
-        <form className="flex flex-col gap-4">
-          <Input
-            type="text"
-            placeholder="Username"
-            className="bg-neutral-850 border border-white/10 text-white placeholder:text-gray-400 focus:border-white/30 transition-all duration-500"
-          />
-          <Input
-            type="email"
-            placeholder="Email"
-            className="bg-neutral-850 border border-white/10 text-white placeholder:text-gray-400 focus:border-white/30 transition-all duration-500"
-          />
-
-          <div className="relative">
+      <form className="my-8" onSubmit={handleSubmit}>
+        <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+          <LabelInputContainer>
+            <Label htmlFor="firstname" className="text-zinc-300">
+              First name
+            </Label>
             <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              className="bg-neutral-850 border border-white/10 text-white placeholder:text-gray-400 focus:border-white/30 transition-all duration-500 pr-12"
+              id="firstname"
+              placeholder="Tyler"
+              type="text"
+              className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
             />
+          </LabelInputContainer>
+          <LabelInputContainer>
+            <Label htmlFor="lastname" className="text-zinc-300">
+              Last name
+            </Label>
+            <Input
+              id="lastname"
+              placeholder="Durden"
+              type="text"
+              className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
+            />
+          </LabelInputContainer>
+        </div>
+
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="email" className="text-zinc-300">
+            Email Address
+          </Label>
+          <Input
+            id="email"
+            placeholder="projectmayhem@fc.com"
+            type="email"
+            className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
+          />
+        </LabelInputContainer>
+
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="password" className="text-zinc-300">
+            Password
+          </Label>
+          <Input
+            id="password"
+            placeholder="••••••••"
+            type="password"
+            className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
+          />
+        </LabelInputContainer>
+
+        <LabelInputContainer className="mb-8">
+          <Label htmlFor="twitterpassword" className="text-zinc-300">
+            Confirm Password
+          </Label>
+          <Input
+            id="twitterpassword"
+            placeholder="••••••••"
+            type="password"
+            className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
+          />
+        </LabelInputContainer>
+
+        <Button
+          className="group/btn relative block h-11 w-full rounded-md bg-gradient-to-br from-zinc-100 to-zinc-300 text-zinc-900 font-semibold shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:from-white hover:to-zinc-200 transition-all duration-500"
+          type="submit"
+        >
+          Sign up &rarr;
+          <BottomGradient />
+        </Button>
+
+        <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+
+        <div className="flex flex-col space-y-4">
+          {[
+            { icon: IconBrandGithub, label: "GitHub" },
+            { icon: IconBrandGoogle, label: "Google" },
+            // { icon: IconBrandOnlyfans, label: "OnlyFans" },
+          ].map(({ icon: Icon, label }, i) => (
             <button
+              key={i}
+              className="group/btn relative flex h-10 w-full items-center justify-start space-x-3 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-200 font-medium px-4 hover:bg-zinc-700 transition-all duration-300"
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-500"
-              onClick={() => setShowPassword((prev) => !prev)}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              <Icon className="h-4 w-4 text-zinc-400" />
+              <span className="text-sm">{label}</span>
+              <BottomGradient />
             </button>
-          </div>
-
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-          >
-            <Button
-              type="submit"
-              size="lg"
-              className={cn(
-                'w-full relative overflow-hidden rounded-full px-10 py-4 font-semibold group transition-all duration-700 ease-in-out',
-                'bg-white text-black border border-white/10 shadow-[0_10px_25px_rgba(255,255,255,0.2)]'
-              )}
-            >
-              <span
-                aria-hidden
-                className="absolute inset-0 bg-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-[1.5s] ease-in-out pointer-events-none"
-              />
-              <span className="relative z-10 group-hover:text-white transition-colors duration-[1.5s] ease-in-out">
-                Register
-              </span>
-            </Button>
-          </motion.div>
-        </form>
-
-        <p className="text-center text-sm text-gray-400 mt-5">
-          Already have an account?{' '}
-          <a
-            href="/auth/login"
-            className="text-white underline underline-offset-4 hover:text-gray-200 transition-colors duration-500"
-          >
-            Login
-          </a>
-        </p>
-      </motion.div>
-    </motion.div>
-  )
+          ))}
+        </div>
+      </form>
+    </div>
+    </div>
+  );
 }
+
+const BottomGradient = () => (
+  <>
+    <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
+    <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
+  </>
+);
+
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => <div className={cn("flex w-full flex-col space-y-2", className)}>{children}</div>;
