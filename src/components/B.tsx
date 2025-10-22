@@ -3,9 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from '@tanstack/react-router'
 import { FeatureCards } from './FeatureCard'
+import { StickyScrollRevealDemo } from './StickyScroll'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { StickyScrollRevealDemo } from './StickyScroll'
+import { InfiniteMovingCardsDemo } from './infinite-moving'
+import { PathPilotCTADemo } from './3d'
 
 
 
@@ -176,7 +178,8 @@ export const BackgroundCellAnimation = () => {
         <FeatureCards />
 
         <StickyScrollRevealDemo/>
-
+        <InfiniteMovingCardsDemo/>
+<PathPilotCTADemo/>
         {/* Footer */}
         <motion.footer
           className="text-sm text-gray-400 mt-20 mb-6"
