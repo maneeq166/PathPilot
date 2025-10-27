@@ -4,12 +4,10 @@ import { motion } from 'framer-motion'
 import { useRouter } from '@tanstack/react-router'
 import { FeatureCards } from './FeatureCard'
 import { StickyScrollRevealDemo } from './StickyScroll'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { InfiniteMovingCardsDemo } from './infinite-moving'
 import { PathPilotCTADemo } from './3d'
-
-
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 /* ------------------ HoverBorderGradient (framer-motion) ------------------ */
 
@@ -36,6 +34,7 @@ export function HoverBorderGradient({
   const [direction, setDirection] = useState<Direction>('TOP')
 
   const rotateDirection = (currentDirection: Direction): Direction => {
+    // eslint-disable-next-line @typescript-eslint/array-type
     const directions: Direction[] = ['TOP', 'LEFT', 'BOTTOM', 'RIGHT']
     const currentIndex = directions.indexOf(currentDirection)
     const nextIndex = clockwise
@@ -96,6 +95,7 @@ export function HoverBorderGradient({
             ? [movingMap[direction], highlight]
             : movingMap[direction],
         }}
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         transition={{ duration: duration ?? 1, ease: 'linear' }}
       />
 
@@ -176,13 +176,13 @@ export const BackgroundCellAnimation = () => {
 
         {/* Feature Cards */}
         <FeatureCards />
+        <StickyScrollRevealDemo />
 
-        <StickyScrollRevealDemo/>
-        <InfiniteMovingCardsDemo/>
-<PathPilotCTADemo/>
+        <InfiniteMovingCardsDemo />
+        <PathPilotCTADemo />
         {/* Footer */}
         <motion.footer
-          className="text-sm text-gray-400 mt-20 mb-6"
+          className="text-sm text-gray-400 mt-5 mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}

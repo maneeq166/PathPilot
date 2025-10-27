@@ -6,9 +6,18 @@ import { Button } from '@/components/ui/button'
 
 export function InfiniteMovingCardsDemo() {
   return (
-    <div className="mt-24 h-[40rem] w-full flex items-center justify-center overflow-hidden">
-      <InfiniteMovingCards items={testimonials} direction="right" speed="slow" />
-    </div>
+    <>
+      <h2 className="text-3xl  md:text-4xl font-bold text-center text-white mt-40 ">
+        Our Testimonials
+      </h2>
+      <div className="-mt-30 h-[40rem] w-full flex items-center justify-center overflow-hidden">
+        <InfiniteMovingCards
+          items={testimonials}
+          direction="right"
+          speed="slow"
+        />
+      </div>
+    </>
   )
 }
 

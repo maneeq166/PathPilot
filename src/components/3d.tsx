@@ -1,72 +1,100 @@
 "use client";
 import React from "react";
-import { PinContainer } from "../components/ui/3d-pin";
+import { Facebook, Instagram, Mail, Twitter } from "lucide-react";
+import { motion } from "framer-motion";
+import { HoverBorderGradient } from "./B";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function PathPilotCTADemo() {
   return (
-    <div className="w-full flex items-center justify-center py-20">
-      <PinContainer title="/pathpilot.com" href="/get-started">
-        <div className="relative flex items-center justify-between p-10 tracking-tight text-white w-[77rem] h-[16rem] bg-neutral-600 rounded-3xl backdrop-blur-md border border-neutral-800 shadow-2xl overflow-hidden">
-
-          {/* 💫 Slim animated glowing border */}
-          <div className="absolute inset-0 rounded-3xl border border-transparent animate-border-glow pointer-events-none"></div>
-
-          {/* 🧠 Left Content */}
-          <div className="relative z-10 flex flex-col max-w-3xl">
-            <h3 className="text-3xl font-bold text-neutral-100 mb-3">
-              Your Path to the Perfect Career Starts Here
-            </h3>
-
-            <p className="text-base text-neutral-300 leading-relaxed mb-5">
-              At <span className="text-white font-semibold">PathPilot</span>,
-              we help you take control of your career. Upload your resume, get
-              AI-powered feedback, and unlock tailored job matches designed to
-              help you grow.
-            </p>
-
-            <ul className="text-sm text-neutral-400 space-y-1 list-disc pl-5">
-              <li>Instant AI Resume Analysis</li>
-              <li>Smart Job Recommendations</li>
-              <li>Interview Preparation Tools</li>
-              <li>Personalized Career Dashboard</li>
-            </ul>
-          </div>
-
-          {/* 🚀 Right-side Button */}
-          <div className="relative z-10 flex-shrink-0 self-center">
+    <motion.section
+      initial={{ opacity: 0, x: -80 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+      className="w-full flex justify-center items-center py-20 text-white"
+    >
+      <div className="w-[92%] bg-neutral-900/85 border border-neutral-800 rounded-3xl px-16 py-16 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-xl">
+        
+        {/* Left Section - Contact & Social */}
+        <div className="absolute left-10 top-[10%] flex flex-col items-start gap-4 text-neutral-400 text-sm">
+          <p className="text-neutral-300 font-semibold mb-2">Stay Connected</p>
+          <div className="flex items-center gap-2">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="bg-neutral-800 border border-neutral-700 rounded-full px-4 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 w-38"
+            />
             <Button
-              size="lg"
-              className="rounded-full px-10 py-4 font-semibold bg-neutral-100 text-black hover:bg-neutral-300 transition-all duration-500 hover:scale-105"
+              size="sm"
+              className="rounded-full bg-white text-black font-semibold px-5 hover:bg-neutral-200 transition-all duration-300"
             >
-              Get Started
+              <Mail className="w-4 h-4" />
             </Button>
           </div>
+
+          <div className="flex items-center gap-4 mt-3">
+            {[Twitter, Facebook, Instagram].map((Icon, i) => (
+              <div key={i} className="hover:scale-110 transition-transform duration-300">
+                <Icon className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
+              </div>
+            ))}
+          </div>
         </div>
-      </PinContainer>
 
-      {/* ✨ Border animation keyframes */}
-      <style jsx>{`
-        @keyframes border-glow {
-          0% {
-            border-image: linear-gradient(0deg, #33bfff, #80cfff, #33bfff) 1;
-          }
-          50% {
-            border-image: linear-gradient(180deg, #80cfff, #33bfff, #80cfff) 1;
-          }
-          100% {
-            border-image: linear-gradient(360deg, #33bfff, #80cfff, #33bfff) 1;
-          }
-        }
+        {/* Right Section - Routes */}
+        <div className="absolute right-10 top-[10%] flex flex-col items-end text-neutral-400 text-sm space-y-3">
+          <p className="text-neutral-300 font-semibold mb-2 uppercase tracking-wide">
+            Pages
+          </p>
+          {["Home", "Features", "About", "Login"].map((route, i) => (
+            <p
+              key={i}
+              className="hover:text-white cursor-pointer transition-colors hover:scale-105 transform duration-300"
+            >
+              {route}
+            </p>
+          ))}
+        </div>
 
-        .animate-border-glow {
-          border: 1px solid transparent;
-          border-radius: 1.5rem;
-          background: linear-gradient(#000, #000) padding-box,
-            linear-gradient(90deg, #33bfff, #80cfff, #33bfff) border-box;
-          animation: border-glow 6s linear infinite;
-        }
-      `}</style>
-    </div>
+        {/* Center Content */}
+        <div className="max-w-xl flex flex-col items-center text-center">
+          <h2 className="text-6xl font-bold mb-7">PathPilot</h2>
+          <p className="text-neutral-400 text-sm sm:text-base mb-5">
+            Discover smarter career growth with AI-powered insights, instant feedback, 
+            and personalized opportunities designed to help you land your dream job.
+          </p>
+
+          {/* Centered Get Started Button */}
+          <motion.div
+            className="mt-6 flex justify-center"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.0, ease: "easeOut" }}
+          >
+            <HoverBorderGradient containerClassName="rounded-full" duration={1.2}>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              >
+                <a href="/auth/login" aria-label="Get started">
+                  <Button
+                    size="lg"
+                    className={cn(
+                      "relative overflow-hidden rounded-full px-8 py-4 font-semibold transition-all group",
+                      "bg-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.7)] border border-white/20"
+                    )}
+                  >
+                    <span className="relative z-10">Get Started</span>
+                  </Button>
+                </a>
+              </motion.div>
+            </HoverBorderGradient>
+          </motion.div>
+        </div>
+      </div>
+    </motion.section>
   );
 }
