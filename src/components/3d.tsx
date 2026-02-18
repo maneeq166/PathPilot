@@ -2,7 +2,7 @@
 import React from "react";
 import { Facebook, Instagram, Mail, Twitter } from "lucide-react";
 import { motion } from "framer-motion";
-import { HoverBorderGradient } from "./B";
+import { HoverBorderGradient } from "./HeroSection";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 

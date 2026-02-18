@@ -1,13 +1,6 @@
-'use client'
-import { createFileRoute } from '@tanstack/react-router'
-import React from 'react'
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandOnlyfans,
-} from '@tabler/icons-react'
-import { Label } from '../../components/ui/label'
-import { Input } from '../../components/ui/input'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
@@ -15,132 +8,199 @@ export const Route = createFileRoute('/auth/register')({
   component: Register,
 })
 
+// Font used: JetBrains Mono (System/Data), Space Grotesk (Headlines)
+
 function Register() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('Form submitted')
-  }
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isHovering, setIsHovering] = useState(false)
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-white">
-      <div className="mt-24 mx-auto w-full max-w-md rounded-2xl bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 p-8 shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-zinc-800">
-        <h2 className="text-2xl font-semibold text-center text-white tracking-tight">
-          Welcome to PathPilot
-        </h2>
-        <p className="mt-2 text-center text-sm text-zinc-400">
-          Create your account to continue your journey.
-        </p>
+    <div className="relative min-h-screen w-full bg-[#050505] text-[#e0e0e0] flex items-center justify-center overflow-hidden selection:bg-emerald-500/30 selection:text-emerald-50">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&display=swap');
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .scanline {
+          background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,0),
+            rgba(255,255,255,0) 50%,
+            rgba(0,0,0,0.2) 50%,
+            rgba(0,0,0,0.2)
+          );
+          background-size: 100% 4px;
+        }
+      `}</style>
 
-        <form className="my-8" onSubmit={handleSubmit}>
-          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-            <LabelInputContainer>
-              <Label htmlFor="firstname" className="text-zinc-300">
-                First name
-              </Label>
-              <Input
-                id="firstname"
-                placeholder="Tyler"
-                type="text"
-                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
-              />
-            </LabelInputContainer>
-            <LabelInputContainer>
-              <Label htmlFor="lastname" className="text-zinc-300">
-                Last name
-              </Label>
-              <Input
-                id="lastname"
-                placeholder="Durden"
-                type="text"
-                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
-              />
-            </LabelInputContainer>
-          </div>
+      {/* Atmospheric Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent_70%)]" />
+        <div className="absolute inset-0 opacity-20 scanline pointer-events-none" />
+        <motion.div 
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: "linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px)",
+            backgroundSize: "40px 40px"
+          }}
+        />
+        {/* Floating Shapes */}
+        <motion.div 
+          animate={{ 
+            y: [0, -20, 0],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-900/10 rounded-full blur-[100px]"
+        />
+        <motion.div 
+          animate={{ 
+            y: [0, 30, 0],
+            opacity: [0.2, 0.5, 0.2]
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-blue-900/10 rounded-full blur-[120px]"
+        />
+      </div>
 
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="email" className="text-zinc-300">
-              Email Address
-            </Label>
-            <Input
-              id="email"
-              placeholder="projectmayhem@fc.com"
-              type="email"
-              className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
-            />
-          </LabelInputContainer>
+      <div className="relative z-10 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 px-6">
+        
+        {/* Left Column: System Messaging */}
+        <div className="hidden lg:flex flex-col justify-center h-full">
+           <motion.div 
+             initial={{ opacity: 0, x: -50 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.8 }}
+           >
+             <div className="flex items-center gap-3 mb-6">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="font-mono text-xs text-emerald-500 uppercase tracking-widest">
+                  Secure_Gateway_v4.2
+                </span>
+             </div>
 
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="password" className="text-zinc-300">
-              Password
-            </Label>
-            <Input
-              id="password"
-              placeholder="••••••••"
-              type="password"
-              className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
-            />
-          </LabelInputContainer>
+             <h1 className="font-display text-7xl font-bold tracking-tighter leading-[0.9] text-white mb-8">
+               PATHPILOT <br />
+               <span className="text-neutral-500">INTELLIGENCE</span> <br />
+               ONBOARDING
+             </h1>
 
-          <LabelInputContainer className="mb-8">
-            <Label htmlFor="twitterpassword" className="text-zinc-300">
-              Confirm Password
-            </Label>
-            <Input
-              id="twitterpassword"
-              placeholder="••••••••"
-              type="password"
-              className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 transition-all"
-            />
-          </LabelInputContainer>
+             <div className="font-mono text-sm text-neutral-400 max-w-md border-l border-neutral-800 pl-6 space-y-4">
+               <p>
+                 Initialize a new neural node to begin career telemetry tracking. 
+                 Establish identity to access analysis protocols.
+               </p>
+               <div className="grid grid-cols-2 gap-4 text-xs uppercase tracking-wide text-neutral-600">
+                 <div>Protocol: NEW_USER</div>
+                 <div>Encryption: AES-256</div>
+                 <div>Capacity: AVAILABLE</div>
+                 <div>Latency: 24ms</div>
+               </div>
+             </div>
+           </motion.div>
+        </div>
 
-          <Button
-            className="group/btn relative block h-11 w-full rounded-md bg-gradient-to-br from-zinc-100 to-zinc-300 text-zinc-900 font-semibold shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:from-white hover:to-zinc-200 transition-all duration-500"
-            type="submit"
+        {/* Right Column: Register Interface */}
+        <div className="flex items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full max-w-md"
           >
-            Sign up &rarr;
-            <BottomGradient />
-          </Button>
+            <div className="bg-[#0a0a0a] border border-neutral-800 p-8 md:p-12 relative overflow-hidden group">
+              {/* Animated Border Gradient */}
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-50" />
+              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent" />
+              
+              <div className="mb-10 text-center">
+                <div className="font-mono text-[10px] text-neutral-500 uppercase tracking-[0.3em] mb-2">Create Identity</div>
+                <h2 className="font-display text-2xl text-white">SYSTEM REGISTRATION</h2>
+              </div>
 
-          <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+              <form className="space-y-6">
+                {/* Full Name Input */}
+                <div className="space-y-2">
+                  <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
+                    Full_Designation
+                  </label>
+                  <input 
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="ENTER FULL NAME..."
+                    className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
+                  />
+                </div>
 
-          <div className="flex flex-col space-y-4">
-            {[
-              // { icon: IconBrandGithub, label: 'GitHub' },
-              // { icon: IconBrandGoogle, label: 'Google' },
-              // { icon: IconBrandOnlyfans, label: "OnlyFans" },
-            ].map(({ icon: Icon, label }, i) => (
-              <button
-                key={i}
-                className="group/btn relative flex h-10 w-full items-center justify-start space-x-3 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-200 font-medium px-4 hover:bg-zinc-700 transition-all duration-300"
-                type="button"
-              >
-                <Icon className="h-4 w-4 text-zinc-400" />
-                <span className="text-sm">{label}</span>
-                <BottomGradient />
-              </button>
-            ))}
-          </div>
-        </form>
+                {/* Email Input */}
+                <div className="space-y-2">
+                  <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
+                    User_Email_ID
+                  </label>
+                  <input 
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="ENTER DESIGNATOR..."
+                    className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
+                  />
+                </div>
+
+                {/* Password Input */}
+                <div className="space-y-2">
+                  <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
+                    Create_Key
+                  </label>
+                  <input 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="SET SECURE KEY..."
+                    className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
+                  />
+                </div>
+
+                <div className="pt-4">
+                  <Button 
+                    className="w-full h-14 bg-white text-black hover:bg-emerald-400 hover:text-black rounded-none font-display font-bold text-lg tracking-wide transition-all relative overflow-hidden group/btn"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                  >
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      ESTABLISH_IDENTITY
+                      <motion.span 
+                        animate={{ x: isHovering ? 4 : 0 }}
+                        className="text-xl"
+                      >
+                        ›
+                      </motion.span>
+                    </span>
+                  </Button>
+                </div>
+              </form>
+
+              <div className="mt-8 flex justify-center items-center font-mono text-[10px] text-neutral-600 uppercase">
+                <span className="mr-2">Existing_Node?</span>
+                <Link to="/auth/login" className="text-emerald-500 hover:text-emerald-400 hover:underline transition-colors">
+                  Access_Terminal
+                </Link>
+              </div>
+
+              {/* Decorative Corner Elements */}
+              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-emerald-500/30" />
+              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-emerald-500/30" />
+              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-emerald-500/30" />
+              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-emerald-500/30" />
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   )
 }
-
-const BottomGradient = () => (
-  <>
-    <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-    <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
-  </>
-)
-
-const LabelInputContainer = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) => (
-  <div className={cn('flex w-full flex-col space-y-2', className)}>
-    {children}
-  </div>
-)

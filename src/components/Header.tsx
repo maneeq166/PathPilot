@@ -1,16 +1,27 @@
-import { Link } from '@tanstack/react-router'
-import { FloatingNav } from './ui/floating-navbar'
+// components/Header.tsx
+
+import React from "react";
+import { FloatingNav } from "@/components/ui/floating-navbar";
 
 export default function Header() {
-
-  const navitem = [
-    {name: "Login", link: "/auth/login"  },
-    {name:"Register",link:"/auth/register"},
-    
-
-  ]
+  const navItems = [
+    {
+      name: "Features",
+      link: "/#features",
+    },
+    {
+      name: "Pricing",
+      link: "/pricing",
+    },
+    {
+      name: "Register",
+      link: "/auth/register",
+    },
+  ];
 
   return (
-    <FloatingNav navItems={navitem} ></FloatingNav>
-  )
+    <div className="relative w-full">
+      <FloatingNav navItems={navItems} />
+    </div>
+  );
 }
