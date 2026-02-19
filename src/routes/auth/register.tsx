@@ -1,8 +1,13 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
+import { useForm } from "react-hook-form"
+import type { z } from "zod"
 import { Button } from '@/components/ui/button'
+import { registerSchema } from '@/validators/auth'
+// eslint-disable-next-line import/order
+import { zodResolver } from "@hookform/resolvers/zod"
+import { register as registerUser } from '@/apis/api'
 
 export const Route = createFileRoute('/auth/register')({
   component: Register,
@@ -11,10 +16,21 @@ export const Route = createFileRoute('/auth/register')({
 // Font used: JetBrains Mono (System/Data), Space Grotesk (Headlines)
 
 function Register() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { register, handleSubmit } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema)
+  });
+  const nav = useNavigate();
   const [isHovering, setIsHovering] = useState(false)
+
+  const onSubmit = async (values: RegisterFormValues) =>{
+    const res = await registerUser(values.username,values.email,values.password);
+    console.log(res);
+    
+    if(!res.success) return;
+
+    nav("/auth/login");
+  }
+
 
   return (
     <div className="relative min-h-screen w-full bg-[#050505] text-[#e0e0e0] flex items-center justify-center overflow-hidden selection:bg-emerald-500/30 selection:text-emerald-50">
@@ -122,7 +138,7 @@ function Register() {
                 <h2 className="font-display text-2xl text-white">SYSTEM REGISTRATION</h2>
               </div>
 
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Full Name Input */}
                 <div className="space-y-2">
                   <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
@@ -130,8 +146,7 @@ function Register() {
                   </label>
                   <input 
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    {...register("username")}
                     placeholder="ENTER FULL NAME..."
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
@@ -144,8 +159,7 @@ function Register() {
                   </label>
                   <input 
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register("email")}
                     placeholder="ENTER DESIGNATOR..."
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
@@ -158,8 +172,7 @@ function Register() {
                   </label>
                   <input 
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    {...register("password")}
                     placeholder="SET SECURE KEY..."
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
@@ -170,6 +183,7 @@ function Register() {
                     className="w-full h-14 bg-white text-black hover:bg-emerald-400 hover:text-black rounded-none font-display font-bold text-lg tracking-wide transition-all relative overflow-hidden group/btn"
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
+                    type="submit"
                   >
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                     <span className="relative z-10 flex items-center justify-center gap-2">
@@ -204,3 +218,6 @@ function Register() {
     </div>
   )
 }
+
+type RegisterFormValues = z.infer<typeof registerSchema>
+

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { login as loginUser } from '@/apis/api'
 
 export const Route = createFileRoute('/auth/login')({
   component: Login,
@@ -65,9 +66,10 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("System Access Requested", { email, password });
+    const res = await loginUser(email, password);
+    if (!res?.success) return;
   };
 
   return (
