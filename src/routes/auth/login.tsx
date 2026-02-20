@@ -1,9 +1,15 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { email } from 'zod'
+import { toast } from 'react-toastify'
+import { useForm } from 'react-hook-form'
+import type z from 'zod'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { login as loginUser } from '@/apis/api'
+import { loginSchema } from '@/validators/auth'
 
 export const Route = createFileRoute('/auth/login')({
   component: Login,
@@ -58,18 +64,50 @@ const BottomGradient = () => {
   );
 };
 
+type LoginFormValues = z.infer<typeof loginSchema>
+
 /* -------------------------------------------------------------------------- */
 /* MAIN COMPONENT                              */
 /* -------------------------------------------------------------------------- */
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const res = await loginUser(email, password);
-    if (!res?.success) return;
+  const nav = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema)
+  });
+
+
+  const onSubmit = async (values: LoginFormValues) => {
+
+    try {
+
+      const res = await loginUser(
+        values.email,
+        values.password
+      );
+
+      if (!res || !res.success) {
+
+        toast.error(res?.message || "Authentication Failed");
+
+        return;
+
+      }
+
+      toast.success("Session Initialized");
+      nav({to: '/analysis/upload' });
+    }
+    catch {
+
+      toast.error("System Error");
+
+    }
+
   };
 
   return (
@@ -175,16 +213,20 @@ function Login() {
                  <p className="font-mono text-xs text-neutral-500 mt-2 uppercase tracking-widest">Identify to proceed</p>
                </div>
 
-               <form className="space-y-6" onSubmit={handleSubmit}>
+               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                  <LabelInputContainer>
                    <Label htmlFor="email">User_Designator (Email)</Label>
                    <Input 
                      id="email" 
                      placeholder="ENTER EMAIL ADDRESS..." 
                      type="email" 
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
+                     {...register("email")}
                    />
+                   {errors.email && (
+                    <p className="text-red-500 text-xs font-mono">
+                      {errors.email.message}
+                    </p>
+                  )}
                  </LabelInputContainer>
 
                  <LabelInputContainer>
@@ -193,9 +235,13 @@ function Login() {
                      id="password" 
                      placeholder="ENTER SECURE TOKEN..." 
                      type="password" 
-                     value={password}
-                     onChange={(e) => setPassword(e.target.value)}
+                     {...register("password")}
                    />
+                   {errors.password && (
+                    <p className="text-red-500 text-xs font-mono">
+                      {errors.password.message}
+                    </p>
+                  )}
                  </LabelInputContainer>
 
                  <div className="pt-4">

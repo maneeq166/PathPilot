@@ -1,20 +1,14 @@
 
 import axios from "axios";
 import { toast } from "react-toastify";
-import serverUrl from "@/config/server";
 
-export const register = async (username:string,email:string,password:string) =>{
-    try {
-        console.log(serverUrl);
-        
-        const result = await axios.post(`${serverUrl}auth/register`,{
+export const register = async (username: string, email: string, password: string) => {
+    try {        
+        const result = await axios.post("http://localhost:4000/api/auth/register", {
             username,
             email,
             password
-        });
-
-        console.log(result);
-        
+        });       
 
         return result.data;
     } catch (error) {
@@ -25,10 +19,17 @@ export const register = async (username:string,email:string,password:string) =>{
 
 export const login = async (email: string, password: string) => {
     try {
-        const result = await axios.post(`${serverUrl}auth/login`, {
+        const result = await axios.post("http://localhost:4000/api/auth/login", {
             email,
             password
         });
+
+        if(!result.data.success){
+            return toast.error(result.data.message || "Authentication Failed");
+        }
+
+        localStorage.setItem("token",result.data.data);
+        
 
         return result.data;
     } catch (error) {
