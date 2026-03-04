@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { motion, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -80,11 +80,12 @@ function LandingPage() {
           <span>Sys.Status: Online</span>
           <span>Build: v2.4.0</span>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          asChild
+          variant="outline"
           className="rounded-none border-cyan-900/50 text-cyan-500 hover:bg-cyan-950/30 hover:text-cyan-400 font-mono text-xs uppercase tracking-wider"
         >
-          Access Terminal
+          <Link to="/analysis/upload">Access Terminal</Link>
         </Button>
       </nav>
 

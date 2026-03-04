@@ -1,301 +1,531 @@
-Welcome to your new TanStack app! 
+# PathPilot Frontend TODO
 
-# Getting Started
+## ✅ Implementation Checklist
 
-To run this application:
+### Phase 1: Project Setup
+- [ ] Initialize React project with Vite
+- [ ] Install core packages: @tanstack/react-router, axios, @tanstack/react-query
+- [ ] Configure Tailwind CSS
+- [ ] Set up folder structure (api/, router/, pages/, components/, context/, hooks/)
 
-```bash
+### Phase 2: Authentication
+- [ ] Set up axios instance with baseURL and JWT interceptor
+- [ ] Create AuthContext for user state management
+- [ ] Implement protected routes
+- [ ] Build Login page with email/password
+- [ ] Build Register page
+- [ ] Add Google OAuth button (redirect to /api/auth/google)
+- [ ] Implement JWT storage and auto-attachment
+
+### Phase 3: Core Pages
+- [ ] Create Home/Landing page
+- [ ] Create Dashboard page with navigation
+- [ ] Create Navbar component
+
+### Phase 4: Resume Upload
+- [ ] Create ResumeUpload page
+- [ ] Implement file upload with Multer (PDF, DOCX support)
+- [ ] Display extracted skills and role from NLP
+- [ ] Create ResumeCard component
+
+### Phase 5: Job Features (Web Scraping)
+- [ ] Create Jobs page
+- [ ] Fetch matched jobs from GET /api/jobs/match
+- [ ] Display jobs using JobCard component
+- [ ] Implement save job functionality
+- [ ] Create view for saved jobs
+
+### Phase 6: User Profile
+- [ ] Display user profile with extracted skills
+- [ ] Show saved jobs count
+
+### Phase 7: Polish & Error Handling
+- [ ] Add loading spinners
+- [ ] Add error/success messages
+- [ ] Test all protected routes
+
+---
+
+Stack:
+
+React
+Vite
+TailwindCSS
+TanStack Router
+Axios
+TanStack Query
+
+Backend connected via REST API
+
+---
+
+# 0. Create Project
+
+npm create vite@latest frontend
+
+Select:
+
+React
+JavaScript
+
+cd frontend
+
 npm install
-npm run start
-```
 
-# Building For Production
+---
 
-To build this application for production:
+# 1. Install Core Packages
 
-```bash
-npm run build
-```
+Routing
 
-## Testing
+npm install @tanstack/react-router
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+API and Server State
 
-```bash
-npm run test
-```
+npm install axios @tanstack/react-query
 
-## Styling
+Styling
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+npm install tailwindcss postcss autoprefixer
 
+npx tailwindcss init -p
 
-## Linting & Formatting
+---
 
+# 2. Configure Tailwind
 
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+Edit:
 
-```bash
-npm run lint
-npm run format
-npm run check
-```
+tailwind.config.js
 
+Add:
 
+content:
 
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+"./index.html"
+"./src/**/*.{js,jsx}"
 
-### Adding A Route
+---
 
-To add a new route to your application just add another a new file in the `./src/routes` directory.
+Edit:
 
-TanStack will automatically generate the content of the route file for you.
+src/index.css
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+Add:
 
-### Adding Links
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
+---
 
-```tsx
-import { Link } from "@tanstack/react-router";
-```
+# 3. Folder Structure
 
-Then anywhere in your JSX you can use it like so:
+src/
 
-```tsx
-<Link to="/about">About</Link>
-```
+main.jsx
 
-This will create a link that will navigate to the `/about` route.
+App.jsx
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
+api/
+    axios.js
 
-### Using A Layout
+router/
+    router.jsx
 
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
+pages/
 
-Here is an example layout that includes a header:
+    Home.jsx
 
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+    Login.jsx
 
-import { Link } from "@tanstack/react-router";
+    Register.jsx
 
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
+    Dashboard.jsx
 
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
+    ResumeUpload.jsx
 
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+    Jobs.jsx
 
+components/
 
-## Data Fetching
+    Navbar.jsx
 
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-npm install @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
+    JobCard.jsx
 
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+    ResumeCard.jsx
 
-export default App;
-```
+context/
 
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
+    AuthContext.jsx
 
-## State Management
+hooks/
 
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
+    useAuth.js
 
-First you need to add TanStack Store as a dependency:
+---
 
-```bash
-npm install @tanstack/store
-```
+# 4. Setup Axios
 
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
+File:
 
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
+api/axios.js
 
-const countStore = new Store(0);
+TODO:
 
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
+create axios instance
 
-export default App;
-```
+baseURL:
 
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
+http://localhost:5000/api
 
-Let's check this out by doubling the count using derived state.
+attach JWT token automatically
 
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
+---
 
-const countStore = new Store(0);
+# 5. Setup Router
 
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
+File:
 
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
+router/router.jsx
 
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
+Routes:
 
-export default App;
-```
+/
 
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
+Home
 
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
+/login
 
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
+/register
 
-# Demo files
+/dashboard
 
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
+/resume
 
-# Learn More
+/jobs
 
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+---
+
+# 6. Setup Auth Context
+
+File:
+
+context/AuthContext.jsx
+
+TODO:
+
+store user
+
+store token
+
+login function
+
+logout function
+
+check login status
+
+use localStorage
+
+---
+
+# 7. Pages Implementation
+
+---
+
+# Home Page
+
+File:
+
+pages/Home.jsx
+
+TODO:
+
+landing page
+
+login button
+
+register button
+
+---
+
+# Login Page
+
+File:
+
+pages/Login.jsx
+
+TODO:
+
+email input
+
+password input
+
+call:
+
+POST /api/auth/login
+
+store token
+
+redirect dashboard
+
+Add Google Login button
+
+redirect to:
+
+/api/auth/google
+
+---
+
+# Register Page
+
+File:
+
+pages/Register.jsx
+
+TODO:
+
+name
+
+email
+
+password
+
+call:
+
+POST /api/auth/register
+
+redirect login
+
+---
+
+# Dashboard Page
+
+File:
+
+pages/Dashboard.jsx
+
+TODO:
+
+show navbar
+
+show buttons:
+
+Upload Resume
+
+View Jobs
+
+Logout
+
+---
+
+# Resume Upload Page
+
+File:
+
+pages/ResumeUpload.jsx
+
+TODO:
+
+file upload input
+
+accept:
+
+PDF
+DOCX
+
+call:
+
+POST /api/resume/upload
+
+multipart/form-data
+
+show parsed data
+
+skills
+
+role
+
+---
+
+# Jobs Page
+
+File:
+
+pages/Jobs.jsx
+
+TODO:
+
+call:
+
+GET /api/jobs/match
+
+display jobs
+
+map jobs
+
+use JobCard component
+
+---
+
+# 8. Components
+
+---
+
+# Navbar
+
+File:
+
+components/Navbar.jsx
+
+TODO:
+
+show:
+
+Dashboard
+
+Resume
+
+Jobs
+
+Logout
+
+---
+
+# JobCard
+
+File:
+
+components/JobCard.jsx
+
+TODO:
+
+display:
+
+title
+
+company
+
+location
+
+match score
+
+---
+
+# ResumeCard
+
+File:
+
+components/ResumeCard.jsx
+
+TODO:
+
+display:
+
+skills
+
+role
+
+upload date
+
+---
+
+# 9. Protected Routes
+
+Prevent access if not logged in
+
+redirect login
+
+---
+
+# 10. Auth Flow
+
+Register
+
+↓
+
+Login
+
+↓
+
+Store JWT
+
+↓
+
+Access Dashboard
+
+↓
+
+Upload Resume
+
+↓
+
+See Jobs
+
+---
+
+# 11. Google OAuth Flow
+
+Button click →
+
+redirect backend
+
+Backend returns →
+
+Frontend receives token
+
+ dashboard
+
+---
+
+#Store token
+
+Redirect 12. Loading and Error Handling
+
+Show:
+
+loading spinner
+
+error messages
+
+success messages
+
+---
+
+# 13. Environment Variable
+
+Create:
+
+.env
+
+Add:
+
+VITE_API_URL=http://localhost:5000/api
+
+---
+
+# 14. Final Frontend Completion Checklist
+
+[ ] Router working
+
+[ ] Auth working
+
+[ ] Google login working
+
+[ ] JWT stored
+
+[ ] Resume upload working
+
+[ ] Resume data visible
+
+[ ] Jobs fetched
+
+[ ] Jobs displayed
+
+[ ] Protected routes working
+
+[ ] Logout working
+
+---
+
+# MVP Frontend Complete

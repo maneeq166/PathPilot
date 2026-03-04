@@ -7,3 +7,9 @@ count.txt
 .env
 .nitro
 .tanstack
+uploads/
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*

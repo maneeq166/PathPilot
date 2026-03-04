@@ -1,96 +1,225 @@
 "use client";
-import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Bell, User, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getResume } from "@/apis/api";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const token = useMemo(() => localStorage.getItem("token"), []);
+  const isLoggedIn = Boolean(token);
+  const [isLoading, setIsLoading] = useState(false);
+  const [resume, setResume] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const loadResume = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await getResume(token);
+        setResume(response?.data ?? response);
+      } catch (err: any) {
+        setError(
+          err?.response?.data?.message ||
+            err?.message ||
+            "Unable to load resume data."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadResume();
+  }, [isLoggedIn, token]);
+
+  const staticFeedback = [
+    "Add 2-3 quantified wins (impact, revenue, performance).",
+    "Keep the summary to 2-3 lines with a clear target role.",
+    "Group skills by category (Frontend, Backend, Cloud).",
+    "Ensure the latest project includes a tech stack line.",
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 text-white flex">
-      {/* Sidebar */}
-      <aside className="w-64 p-6 border-r border-zinc-800 flex flex-col justify-between">
-        <div>
-          <h1 className="text-2xl font-bold mb-8 tracking-tight text-white">
-            PathPilot
-          </h1>
-          <nav className="space-y-4">
-            {["Overview", "Analytics", "Projects", "Team"].map((item) => (
-              <button
-                key={item}
-                className="block w-full text-left text-zinc-400 hover:text-white hover:bg-zinc-800 px-3 py-2 rounded-md transition-all duration-300"
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        <div className="border-t border-zinc-800 pt-6 space-y-2">
-          <button className="w-full flex items-center gap-2 text-zinc-400 hover:text-white transition">
-            <User size={18} /> Profile
-          </button>
-          <button className="w-full flex items-center gap-2 text-zinc-400 hover:text-white transition">
-            <Settings size={18} /> Settings
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Dashboard */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-8">
+    <div className="min-h-screen bg-[#050608] text-slate-100">
+      <div className="max-w-6xl mx-auto px-6 py-16">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight">Dashboard</h2>
-            <p className="text-zinc-400 text-sm">Welcome back to PathPilot 👋</p>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-cyan-400">
+              Resume Dashboard
+            </p>
+            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mt-3">
+              Resume Insights
+            </h1>
+            <p className="text-slate-400 text-sm mt-2">
+              Parsed resume data with quick feedback for the next iteration.
+            </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Button className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center gap-2">
-              <Bell size={16} />
-              Notifications
-            </Button>
-            <Button className="bg-gradient-to-br from-zinc-100 to-zinc-300 text-zinc-900 font-semibold hover:from-white hover:to-zinc-200 transition-all">
-              + New Project
-            </Button>
-          </div>
-        </div>
-
-        {/* Dashboard Cards */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {[
-            { title: "Active Projects", value: "12" },
-            { title: "Pending Tasks", value: "48" },
-            { title: "Team Members", value: "8" },
-          ].map((card, i) => (
-            <div
-              key={i}
-              className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:scale-[1.02] transition-transform duration-300 shadow-lg shadow-black/20"
+          <div className="flex flex-wrap gap-3">
+            <Button
+              asChild
+              className="rounded-full bg-cyan-500 text-black hover:bg-cyan-400"
             >
-              <h3 className="text-zinc-400 text-sm">{card.title}</h3>
-              <p className="text-2xl font-semibold mt-2">{card.value}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Recent Activity Section */}
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold mb-4">Recent Activity</h3>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <ul className="space-y-3 text-zinc-300">
-              <li>✅ Project “Orbit UI” completed successfully.</li>
-              <li>⚙️ Server maintenance scheduled for tomorrow.</li>
-              <li>🧠 Analytics module updated with new insights.</li>
-            </ul>
+              <Link to="/analysis/upload">Upload New Resume</Link>
+            </Button>
+            {!isLoggedIn && (
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-white/20"
+              >
+                <Link to="/auth/login">Login</Link>
+              </Button>
+            )}
           </div>
         </div>
-      </main>
+
+        {!isLoggedIn && (
+          <div className="mt-10 border border-white/10 rounded-2xl p-6 bg-white/5">
+            <p className="text-slate-300">
+              Login required to view resume insights.
+            </p>
+          </div>
+        )}
+
+        {isLoggedIn && (
+          <>
+            {isLoading && (
+              <div className="mt-10 border border-white/10 rounded-2xl p-6 bg-white/5 text-slate-400 font-mono text-sm">
+                Loading resume data...
+              </div>
+            )}
+
+            {error && (
+              <div className="mt-10 border border-red-500/40 rounded-2xl p-6 bg-red-500/10 text-red-200 font-mono text-sm">
+                {error}
+              </div>
+            )}
+
+            {resume && !isLoading && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6"
+                >
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <p className="text-slate-400 text-xs uppercase tracking-[0.2em]">
+                      Role
+                    </p>
+                    <p className="text-2xl font-semibold mt-3">
+                      {resume?.inferredRole || "Not inferred yet"}
+                    </p>
+                    <p className="text-slate-500 text-sm mt-2">
+                      Parsing status: {resume?.processingStatus || "unknown"}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <p className="text-slate-400 text-xs uppercase tracking-[0.2em]">
+                      Skills
+                    </p>
+                    <p className="text-2xl font-semibold mt-3">
+                      {resume?.parsedData?.skills?.length || 0}
+                    </p>
+                    <p className="text-slate-500 text-sm mt-2">
+                      Recognized skill keywords.
+                    </p>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <p className="text-slate-400 text-xs uppercase tracking-[0.2em]">
+                      File
+                    </p>
+                    <p className="text-2xl font-semibold mt-3">
+                      {resume?.fileMeta?.fileType?.toUpperCase() || "N/A"}
+                    </p>
+                    <p className="text-slate-500 text-sm mt-2">
+                      {resume?.fileMeta?.originalName || "Unknown filename"}
+                    </p>
+                  </div>
+                </motion.div>
+
+                <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <h2 className="text-xl font-semibold">Extracted Skills</h2>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {(resume?.parsedData?.skills || []).map((skill: string) => (
+                        <span
+                          key={skill}
+                          className="px-3 py-1 rounded-full text-xs font-mono text-cyan-200 bg-cyan-500/10 border border-cyan-400/30"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {(!resume?.parsedData?.skills ||
+                        resume.parsedData.skills.length === 0) && (
+                        <p className="text-slate-500 text-sm">
+                          No skills detected yet.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <h2 className="text-xl font-semibold">Static Feedback</h2>
+                    <div className="mt-4 space-y-3 text-slate-300 text-sm">
+                      {staticFeedback.map((tip) => (
+                        <div key={tip} className="flex items-start gap-3">
+                          <span className="w-2 h-2 rounded-full bg-cyan-400 mt-2" />
+                          <p>{tip}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <h2 className="text-xl font-semibold">Education</h2>
+                    <div className={cn("mt-4 space-y-2 text-sm text-slate-300")}>
+                      {(resume?.parsedData?.education || []).map(
+                        (item: string, idx: number) => (
+                          <p key={`${item}-${idx}`}>{item}</p>
+                        )
+                      )}
+                      {(!resume?.parsedData?.education ||
+                        resume.parsedData.education.length === 0) && (
+                        <p className="text-slate-500 text-sm">
+                          No education lines extracted.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <h2 className="text-xl font-semibold">Experience</h2>
+                    <div className="mt-4 space-y-2 text-sm text-slate-300">
+                      {(resume?.parsedData?.experience || []).map(
+                        (item: string, idx: number) => (
+                          <p key={`${item}-${idx}`}>{item}</p>
+                        )
+                      )}
+                      {(!resume?.parsedData?.experience ||
+                        resume.parsedData.experience.length === 0) && (
+                        <p className="text-slate-500 text-sm">
+                          No experience lines extracted.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
