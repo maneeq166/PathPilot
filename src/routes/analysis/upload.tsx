@@ -4,6 +4,7 @@ import { getResume, uploadResume } from '@/apis/api'
 import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { toast } from 'react-toastify'
 
 export const Route = createFileRoute('/analysis/upload')({
   component: RouteComponent,
@@ -35,8 +36,14 @@ function RouteComponent() {
       try {
         const response = await getResume(token)
         setResult(response?.data ?? response)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        const message =
+          err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          err?.message ||
+          'Unable to load existing resume.'
+        setError(message)
+        toast.error(message)
       } finally {
         setIsLoadingResume(false)
       }
@@ -55,13 +62,17 @@ function RouteComponent() {
     }
 
     if (!ACCEPTED_TYPES.includes(nextFile.type)) {
-      setError('Only PDF or DOCX files are allowed.')
+      const message = 'Only PDF or DOCX files are allowed.'
+      setError(message)
+      toast.error(message)
       setFile(null)
       return
     }
 
     if (nextFile.size > 1 * 1024 * 1024) {
-      setError('File too large. Max size is 1MB.')
+      const message = 'File too large. Max size is 1MB.'
+      setError(message)
+      toast.error(message)
       setFile(null)
       return
     }
@@ -77,12 +88,16 @@ function RouteComponent() {
 
   const handleUpload = async () => {
     if (!file) {
-      setError('Select a resume first.')
+      const message = 'Select a resume first.'
+      setError(message)
+      toast.error(message)
       return
     }
 
     if (!isLoggedIn) {
-      setError('Please login to upload your resume.')
+      const message = 'Please login to upload your resume.'
+      setError(message)
+      toast.error(message)
       return
     }
 
@@ -91,7 +106,15 @@ function RouteComponent() {
 
     try {
       const response = await uploadResume(file, token)
-      setResult(response?.data ?? response)
+      const data = response?.data ?? response
+      
+      if (data?.aiEnhanced) {
+        toast.success('AI parsing completed successfully.')
+      } else {
+        toast.info('AI parsing unavailable. Normal parsing completed.')
+      }
+      
+      setResult(data)
       navigate({ to: '/dashboard' })
     } catch (err: any) {
       const message =
@@ -100,6 +123,7 @@ function RouteComponent() {
         err?.message ||
         'Upload failed. Please try again.'
       setError(message)
+      toast.error(message)
     } finally {
       setIsUploading(false)
     }

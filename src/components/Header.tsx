@@ -6,16 +6,12 @@ import { FloatingNav } from "@/components/ui/floating-navbar";
 export default function Header() {
   const navItems = [
     {
-      name: "Features",
-      link: "/#features",
+      name: "Dashboard",
+      link: "/dashboard",
     },
     {
-      name: "Pricing",
-      link: "/pricing",
-    },
-    {
-      name: "Register",
-      link: "/auth/register",
+      name: "Upload",
+      link: "/analysis/upload",
     },
   ];
 

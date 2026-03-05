@@ -1,6 +1,6 @@
 // components/ui/floating-navbar.tsx
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -23,9 +23,63 @@ export const FloatingNav = ({
 }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const isLoggedIn = useMemo(() => Boolean(token), [token]);
+
+  const decodeJwtUsername = (tokenValue: string): string | null => {
+    try {
+      const payload = tokenValue.split(".")[1];
+      if (!payload || typeof atob !== "function") return null;
+      let base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const pad = base64.length % 4;
+      if (pad) {
+        base64 += "=".repeat(4 - pad);
+      }
+      const json = atob(base64);
+      return JSON.parse(json)?.username ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    window.dispatchEvent(new Event("auth:changed"));
+    window.location.href = "/";
+  };
+
+  useEffect(() => {
+    const syncAuth = () => {
+      const nextToken = localStorage.getItem("token");
+      let nextUsername = localStorage.getItem("username");
+
+      if (!nextUsername && nextToken) {
+        const decoded = decodeJwtUsername(nextToken);
+        if (decoded) {
+          nextUsername = decoded;
+          localStorage.setItem("username", decoded);
+        }
+      }
+
+      setToken(nextToken);
+      setUsername(nextUsername);
+    };
+
+    syncAuth();
+
+    const handleAuthChange = () => syncAuth();
+    window.addEventListener("storage", handleAuthChange);
+    window.addEventListener("auth:changed", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("storage", handleAuthChange);
+      window.removeEventListener("auth:changed", handleAuthChange);
+    };
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
       let direction = current - scrollYProgress.getPrevious()!;
 
@@ -73,7 +127,7 @@ export const FloatingNav = ({
         {navItems.map((navItem, idx) => (
           <Link
             key={`link=${idx}`}
-            to={navItem.link}
+            to={isLoggedIn ? navItem.link : "/auth/register"}
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-300 dark:hover:text-neutral-300 hover:text-neutral-500 font-mono text-xs uppercase tracking-wider"
             )}
@@ -82,13 +136,36 @@ export const FloatingNav = ({
           </Link>
         ))}
         
-        {/* CTA Button */}
-        <Link to="/auth/login">
-            <button className="border text-xs font-mono font-medium relative border-cyan-500/70 bg-cyan-500/30 dark:border-white/[0.2] text-cyan-300 dark:text-white px-4 py-2 rounded-full hover:bg-cyan-500/10 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors">
-            <span>Login</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent  h-px" />
+        {/* Auth Buttons or User Info */}
+        {isLoggedIn ? (
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono text-cyan-300">
+              {username || "User"}
+            </span>
+            <button 
+              onClick={handleLogout}
+              className="border text-xs font-mono font-medium relative border-red-500/70 bg-red-500/30 dark:border-white/[0.2] text-red-300 dark:text-white px-4 py-2 rounded-full hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-colors"
+            >
+              <span>Logout</span>
+              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-red-500 to-transparent h-px" />
             </button>
-        </Link>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Link to="/auth/login">
+                <button className="border text-xs font-mono font-medium relative border-cyan-500/70 bg-cyan-500/30 dark:border-white/[0.2] text-cyan-300 dark:text-white px-4 py-2 rounded-full hover:bg-cyan-500/10 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors">
+                <span>Login</span>
+                <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-px" />
+                </button>
+            </Link>
+            <Link to="/auth/register">
+                <button className="border text-xs font-mono font-medium relative border-neutral-500/70 bg-neutral-500/30 dark:border-white/[0.2] text-neutral-300 dark:text-white px-4 py-2 rounded-full hover:bg-neutral-500/10 hover:border-neutral-500/50 hover:text-neutral-400 transition-colors">
+                <span>Register</span>
+                <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent h-px" />
+                </button>
+            </Link>
+          </div>
+        )}
       </motion.div>
     </AnimatePresence>
   );

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { getResume } from "@/apis/api";
 import { cn } from "@/lib/utils";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/dashboard/")({
   component: RouteComponent,
@@ -27,11 +28,9 @@ function RouteComponent() {
         const response = await getResume(token);
         setResume(response?.data ?? response);
       } catch (err: any) {
-        setError(
-          err?.response?.data?.message ||
-            err?.message ||
-            "Unable to load resume data."
-        );
+        const errorMsg = err?.response?.data?.message || err?.message || "Unable to load resume data.";
+        setError(errorMsg);
+        toast.error(errorMsg);
       } finally {
         setIsLoading(false);
       }
