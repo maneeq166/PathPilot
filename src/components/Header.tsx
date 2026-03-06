@@ -13,6 +13,10 @@ export default function Header() {
       name: "Upload",
       link: "/analysis/upload",
     },
+    {
+      name: "Settings",
+      link: "/dashboard/settings",
+    },
   ];
 
   return (

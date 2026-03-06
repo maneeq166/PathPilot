@@ -148,6 +148,30 @@ function RouteComponent() {
           background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(6,182,212,0.1) 50%, rgba(6,182,212,0.1));
           background-size: 100% 4px;
         }
+
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(6, 182, 212, 0.65) rgba(8, 12, 15, 0.9);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(8, 12, 15, 0.9);
+          border-left: 1px solid rgba(6, 182, 212, 0.12);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, rgba(6, 182, 212, 0.9), rgba(34, 211, 238, 0.5));
+          border-radius: 999px;
+          box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.25);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, rgba(6, 182, 212, 1), rgba(34, 211, 238, 0.7));
+        }
       `}</style>
 
       {/* Atmospheric Background */}
@@ -344,7 +368,7 @@ function RouteComponent() {
               <div className="font-mono text-[10px] text-slate-500 uppercase tracking-widest mb-4">
                 [ EXISTING_PROFILE_DATA ]
               </div>
-              <div className="font-mono text-[10px] text-slate-400 whitespace-pre-wrap max-h-64 overflow-y-auto custom-scrollbar">
+              <div className="font-mono text-[12px] text-slate-300 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto custom-scrollbar">
                 {JSON.stringify(result, null, 2)}
               </div>
             </motion.div>

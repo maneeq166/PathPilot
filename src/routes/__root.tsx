@@ -11,7 +11,19 @@ export const Route = createRootRoute({
 
       <Outlet />
 
-      <ToastContainer position="top-right" autoClose={3500} hideProgressBar={false} newestOnTop />
+      <ToastContainer
+        position="top-right"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop
+        closeButton={false}
+        icon={false}
+        toastClassName={(context) =>
+          `pp-toast pp-toast--${context?.type ?? 'default'}`
+        }
+        bodyClassName="pp-toast-body"
+        progressClassName="pp-toast-progress"
+      />
 
       <TanstackDevtools
         config={{

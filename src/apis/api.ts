@@ -22,6 +22,14 @@ const decodeJwtPayload = (token: string): { username?: string } | null => {
     }
 };
 
+const buildAuthHeaders = (token?: string | null) => {
+    const headers: Record<string, string> = {};
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
+};
+
 export const register = async (username: string, email: string, password: string) => {
     try {        
         const result = await axios.post(`${apiBase}/api/auth/register`, {
@@ -83,11 +91,8 @@ export const uploadResume = async (file: File, token?: string | null) => {
 
         const headers: Record<string, string> = {
             "Content-Type": "multipart/form-data",
+            ...buildAuthHeaders(token),
         };
-
-        if (token) {
-            headers.Authorization = `Bearer ${token}`;
-        }
 
         const result = await axios.post(`${apiBase}/api/resume/upload`, formData, { headers });
         return result.data;
@@ -99,15 +104,65 @@ export const uploadResume = async (file: File, token?: string | null) => {
 
 export const getResume = async (token?: string | null) => {
     try {
-        const headers: Record<string, string> = {};
-        if (token) {
-            headers.Authorization = `Bearer ${token}`;
-        }
-
-        const result = await axios.get(`${apiBase}/api/resume`, { headers });
+        const result = await axios.get(`${apiBase}/api/resume`, { headers: buildAuthHeaders(token) });
         return result.data;
     } catch (error) {
         console.log(error);
         throw error;
     }
 }
+
+export const getCurrentUser = async (token?: string | null) => {
+    try {
+        const result = await axios.get(`${apiBase}/api/auth`, { headers: buildAuthHeaders(token) });
+        return result.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const updateCurrentUser = async (
+    updatedData: { username?: string; email?: string; location?: string },
+    token?: string | null
+) => {
+    try {
+        const result = await axios.patch(
+            `${apiBase}/api/auth`,
+            { updatedData },
+            { headers: buildAuthHeaders(token) }
+        );
+        return result.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const deleteCurrentUser = async (token?: string | null) => {
+    try {
+        const result = await axios.delete(`${apiBase}/api/auth`, {
+            headers: buildAuthHeaders(token),
+        });
+        return result.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const queryUsersAdmin = async (
+    params: { email?: string; username?: string },
+    token?: string | null
+) => {
+    try {
+        const result = await axios.get(`${apiBase}/api/auth/admin`, {
+            headers: buildAuthHeaders(token),
+            params,
+        });
+        return result.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
