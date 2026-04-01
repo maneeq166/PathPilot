@@ -42,7 +42,7 @@ function Register() {
         return
       }
 
-      toast.success('Identity Established')
+      toast.success('Account created successfully!')
 
       nav({ to: '/auth/login' })
     } catch (error) {
@@ -120,21 +120,19 @@ function Register() {
             </div>
 
             <h1 className="font-display text-7xl font-bold tracking-tighter leading-[0.9] text-white mb-8">
-              PATHPILOT <br />
-              <span className="text-neutral-500">INTELLIGENCE</span> <br />
-              ONBOARDING
+              Create <br />
+              <span className="text-neutral-500">Your Account</span> <br />
             </h1>
 
             <div className="font-mono text-sm text-neutral-400 max-w-md border-l border-neutral-800 pl-6 space-y-4">
               <p>
-                Initialize a new neural node to begin career telemetry tracking.
-                Establish identity to access analysis protocols.
+                Create your account to get personalized job recommendations and AI-powered career insights.
               </p>
               <div className="grid grid-cols-2 gap-4 text-xs uppercase tracking-wide text-neutral-600">
-                <div>Protocol: NEW_USER</div>
-                <div>Encryption: AES-256</div>
-                <div>Capacity: AVAILABLE</div>
-                <div>Latency: 24ms</div>
+                <div>Free to use</div>
+                <div>Secure</div>
+                <div>AI-powered</div>
+                <div>Easy setup</div>
               </div>
             </div>
           </motion.div>
@@ -155,10 +153,10 @@ function Register() {
 
               <div className="mb-10 text-center">
                 <div className="font-mono text-[10px] text-neutral-500 uppercase tracking-[0.3em] mb-2">
-                  Create Identity
+                  Get Started
                 </div>
                 <h2 className="font-display text-2xl text-white">
-                  SYSTEM REGISTRATION
+                  Create Account
                 </h2>
               </div>
 
@@ -166,12 +164,12 @@ function Register() {
                 {/* Full Name Input */}
                 <div className="space-y-2">
                   <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
-                    Full_Designation
+                    Full Name
                   </label>
                   <input
                     type="text"
                     {...register('username')}
-                    placeholder="ENTER FULL NAME..."
+                    placeholder="Enter your full name"
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
                   {errors.username && (
@@ -184,12 +182,12 @@ function Register() {
                 {/* Email Input */}
                 <div className="space-y-2">
                   <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
-                    User_Email_ID
+                    Email
                   </label>
                   <input
                     type="email"
                     {...register('email')}
-                    placeholder="ENTER DESIGNATOR..."
+                    placeholder="Enter your email"
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
                   {errors.email && (
@@ -202,12 +200,12 @@ function Register() {
                 {/* Password Input */}
                 <div className="space-y-2">
                   <label className="font-mono text-xs text-emerald-500 uppercase tracking-wider block">
-                    Create_Key
+                    Password
                   </label>
                   <input
                     type="password"
                     {...register('password')}
-                    placeholder="SET SECURE KEY..."
+                    placeholder="Create a password"
                     className="w-full bg-[#050505] border border-neutral-800 text-white font-mono text-sm px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:bg-[#0f0f0f] transition-all placeholder:text-neutral-700"
                   />
                   {errors.password && (
@@ -227,7 +225,7 @@ function Register() {
                   >
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                     <span className="relative z-10 flex items-center justify-center gap-2">
-                      ESTABLISH_IDENTITY
+                      Create Account
                       <motion.span
                         animate={{ x: isHovering ? 4 : 0 }}
                         className="text-xl"
@@ -240,12 +238,12 @@ function Register() {
               </form>
 
               <div className="mt-8 flex justify-center items-center font-mono text-[10px] text-neutral-600 uppercase">
-                <span className="mr-2">Existing_Node?</span>
+                <span className="mr-2">Already have an account?</span>
                 <Link
                   to="/auth/login"
                   className="text-emerald-500 hover:text-emerald-400 hover:underline transition-colors"
                 >
-                  Access_Terminal
+                  Sign In
                 </Link>
               </div>
 

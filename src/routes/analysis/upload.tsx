@@ -25,6 +25,11 @@ function RouteComponent() {
   const [isLoadingResume, setIsLoadingResume] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<any>(null)
+  const [aiEnabled, setAiEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true
+    const stored = localStorage.getItem('aiEnabled')
+    return stored === null ? true : stored === 'true'
+  })
 
   const token = useMemo(() => localStorage.getItem('token'), [])
   const isLoggedIn = Boolean(token)
@@ -54,6 +59,11 @@ function RouteComponent() {
     loadResume()
   }, [isLoggedIn, token])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    localStorage.setItem('aiEnabled', String(aiEnabled))
+  }, [aiEnabled])
+
   const pickFile = (nextFile?: File | null) => {
     setError(null)
     setResult(null)
@@ -72,7 +82,7 @@ function RouteComponent() {
     }
 
     if (nextFile.size > 1 * 1024 * 1024) {
-      const message = 'Payload exceeds maximum allowed capacity (1MB).'
+      const message = 'File too large. Maximum size is 1MB.'
       setError(message)
       toast.error(message)
       setFile(null)
@@ -90,14 +100,14 @@ function RouteComponent() {
 
   const handleUpload = async () => {
     if (!file) {
-      const message = 'No data payload selected.'
+      const message = 'Please select a file first.'
       setError(message)
       toast.error(message)
       return
     }
 
     if (!isLoggedIn) {
-      const message = 'System access restricted. Authentication required.'
+      const message = 'Please log in to upload your resume.'
       setError(message)
       toast.error(message)
       return
@@ -107,13 +117,13 @@ function RouteComponent() {
     setError(null)
 
     try {
-      const response = await uploadResume(file, token)
+      const response = await uploadResume(file, token, aiEnabled)
       const data = response?.data ?? response
       
       if (data?.aiEnhanced) {
-        toast.success('AI telemetry parsing completed successfully.')
+        toast.success('Resume uploaded successfully!')
       } else {
-        toast.info('AI parsing unavailable. Standard extraction deployed.')
+        toast.info('Resume uploaded successfully!')
       }
       
       setResult(data)
@@ -123,7 +133,7 @@ function RouteComponent() {
         err?.response?.data?.message ||
         err?.response?.data?.error ||
         err?.message ||
-        'Upload protocol failed. Please retry.'
+        'Upload failed. Please try again.'
       setError(message)
       toast.error(message)
     } finally {
@@ -198,15 +208,15 @@ function RouteComponent() {
           <div className="flex items-center gap-3 mb-4">
             <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
             <span className="font-mono text-[10px] text-cyan-400 tracking-[0.3em] uppercase">
-              Data_Ingestion_Protocol
+              Resume Upload
             </span>
           </div>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white leading-none">
-            INITIALIZE <br />
-            <span className="text-slate-500">DOCUMENT SCAN</span>
+            UPLOAD <br />
+            <span className="text-slate-500">YOUR RESUME</span>
           </h1>
           <p className="font-mono text-slate-400 text-xs mt-6 uppercase tracking-widest max-w-xl leading-relaxed border-l-2 border-cyan-900/50 pl-4">
-            Upload your resume to begin career telemetry parsing. The system currently stores raw structural data. Neural extraction will deploy in phase two.
+            Upload your resume to get personalized career recommendations and AI-powered insights.
           </p>
         </motion.div>
 
@@ -254,7 +264,7 @@ function RouteComponent() {
             </div>
             <div>
               <p className="font-display text-2xl text-white mb-2 tracking-tight">
-                {isDragging ? "DROP TO INGEST" : "DRAG & DROP PAYLOAD"}
+                {isDragging ? "DROP TO UPLOAD" : "DRAG & DROP FILE"}
               </p>
               <p className="font-mono text-xs text-slate-500 tracking-widest uppercase">
                 Supported: PDF, DOCX (Max 1MB)
@@ -269,7 +279,7 @@ function RouteComponent() {
                 inputRef.current?.click()
               }}
             >
-              [ BROWSE LOCAL DIRECTORY ]
+              [ Browse Files ]
             </Button>
             <input
               ref={inputRef}
@@ -298,7 +308,7 @@ function RouteComponent() {
                 className="border-l-2 border-cyan-500 bg-cyan-950/20 p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
               >
                 <div>
-                  <div className="font-mono text-[10px] text-cyan-500 uppercase tracking-widest mb-1">Payload Staged</div>
+                  <div className="font-mono text-[10px] text-cyan-500 uppercase tracking-widest mb-1">File Selected</div>
                   <p className="font-mono text-sm text-white truncate max-w-md">{file.name}</p>
                 </div>
                 <div className="text-right flex flex-col items-start md:items-end">
@@ -328,7 +338,27 @@ function RouteComponent() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/10 pt-8 mt-8">
             <div className="font-mono text-[10px] uppercase tracking-widest text-slate-500 flex items-center gap-2 w-full md:w-auto">
               <span className={cn("w-1.5 h-1.5 rounded-full", isLoggedIn ? "bg-green-500" : "bg-red-500")} />
-              {isLoggedIn ? 'SYSTEM AUTHENTICATED' : 'AUTHENTICATION REQUIRED'}
+              {isLoggedIn ? 'Authenticated' : 'Login Required'}
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-slate-500">
+              <span className={cn("w-1.5 h-1.5 rounded-full", aiEnabled ? "bg-cyan-500" : "bg-slate-600")} />
+              AI Analysis
+              <button
+                type="button"
+                onClick={() => setAiEnabled((prev) => !prev)}
+                className={cn(
+                  "ml-2 inline-flex h-5 w-9 items-center rounded-full border transition-colors",
+                  aiEnabled ? "border-cyan-400 bg-cyan-500/20" : "border-slate-700 bg-slate-900"
+                )}
+              >
+                <span
+                  className={cn(
+                    "inline-block h-3 w-3 rounded-full transition-transform",
+                    aiEnabled ? "translate-x-5 bg-cyan-400" : "translate-x-1 bg-slate-500"
+                  )}
+                />
+              </button>
             </div>
             
             <Button
@@ -339,11 +369,11 @@ function RouteComponent() {
               {isUploading ? (
                 <span className="flex items-center gap-3">
                   <div className="w-3 h-3 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-                  UPLOADING DATA...
+                  Uploading...
                 </span>
               ) : (
                 <span className="relative z-10 flex items-center gap-2">
-                  <span className="group-hover:animate-ping">⬡</span> EXECUTE UPLOAD
+                  <span className="group-hover:animate-ping">⬡</span> Upload Resume
                 </span>
               )}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -354,7 +384,7 @@ function RouteComponent() {
           {isLoadingResume && (
             <div className="mt-8 border border-white/10 p-4 bg-white/[0.02] font-mono text-xs text-slate-400 animate-pulse flex items-center gap-3">
               <span className="w-2 h-2 bg-slate-400 rounded-full" />
-              QUERYING EXISTING RECORDS...
+              Loading existing data...
             </div>
           )}
 
@@ -366,7 +396,7 @@ function RouteComponent() {
             >
               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-500/50 to-transparent" />
               <div className="font-mono text-[10px] text-slate-500 uppercase tracking-widest mb-4">
-                [ EXISTING_PROFILE_DATA ]
+                [ SAVED PROFILE ]
               </div>
               <div className="font-mono text-[12px] text-slate-300 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto custom-scrollbar">
                 {JSON.stringify(result, null, 2)}

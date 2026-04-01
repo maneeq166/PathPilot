@@ -99,7 +99,7 @@ function Login() {
 
       }
 
-      toast.success("Session Initialized");
+      toast.success("Welcome back!");
       nav({to: '/analysis/upload' });
     }
     catch {
@@ -167,24 +167,23 @@ function Login() {
              </div>
 
              <h1 className="font-display text-6xl xl:text-7xl font-bold tracking-tighter leading-[0.9] text-white mb-8">
-               PATHPILOT <br />
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-400 to-neutral-700">AUTHENTICATION</span> <br />
-               SYSTEM
+               Welcome to <br />
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-400 to-neutral-700">PathPilot</span> <br />
              </h1>
 
              <div className="space-y-6 font-mono text-sm text-neutral-400 max-w-md border-l border-neutral-800 pl-6">
                <p>
-                 Secure access to your career intelligence profile.
+                 Your personal career assistant. Get personalized job recommendations and AI-powered insights.
                </p>
                <ul className="space-y-2 text-xs uppercase tracking-wider text-neutral-500">
                  <li className="flex items-center gap-3">
-                   <span className="text-emerald-500">[✓]</span> Resume Analysis Engine
+                   <span className="text-emerald-500">[✓]</span> Resume Analysis
                  </li>
                  <li className="flex items-center gap-3">
-                   <span className="text-emerald-500">[✓]</span> Match Tracking Log
+                   <span className="text-emerald-500">[✓]</span> Job Match Tracking
                  </li>
                  <li className="flex items-center gap-3">
-                   <span className="text-emerald-500">[✓]</span> Interview Feedback Loop
+                   <span className="text-emerald-500">[✓]</span> Interview Practice
                  </li>
                </ul>
              </div>
@@ -209,16 +208,16 @@ function Login() {
                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
 
                <div className="mb-8 text-center">
-                 <h2 className="font-display text-2xl text-white font-medium tracking-tight">SYSTEM LOGIN</h2>
-                 <p className="font-mono text-xs text-neutral-500 mt-2 uppercase tracking-widest">Identify to proceed</p>
+                 <h2 className="font-display text-2xl text-white font-medium tracking-tight">Sign In</h2>
+                 <p className="font-mono text-xs text-neutral-500 mt-2 uppercase tracking-widest">Enter your credentials</p>
                </div>
 
                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                  <LabelInputContainer>
-                   <Label htmlFor="email">User_Designator (Email)</Label>
+                   <Label htmlFor="email">Email</Label>
                    <Input 
                      id="email" 
-                     placeholder="ENTER EMAIL ADDRESS..." 
+                     placeholder="Enter your email" 
                      type="email" 
                      {...register("email")}
                    />
@@ -230,10 +229,10 @@ function Login() {
                  </LabelInputContainer>
 
                  <LabelInputContainer>
-                   <Label htmlFor="password">Access_Key (Password)</Label>
+                   <Label htmlFor="password">Password</Label>
                    <Input 
                      id="password" 
-                     placeholder="ENTER SECURE TOKEN..." 
+                     placeholder="Enter your password" 
                      type="password" 
                      {...register("password")}
                    />
@@ -249,11 +248,11 @@ function Login() {
                      className="w-full h-12 bg-white text-black rounded-sm font-mono font-bold tracking-wider hover:bg-emerald-400 hover:text-black transition-all group/btn relative overflow-hidden"
                      type="submit"
                    >
-                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
-                     <span className="relative z-10 flex items-center justify-center gap-2">
-                       INITIALIZE SESSION
-                       <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
-                     </span>
+                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        Sign In
+                        <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                      </span>
                      <BottomGradient />
                    </Button>
                  </div>
@@ -262,10 +261,10 @@ function Login() {
                {/* Footer Links */}
                <div className="mt-8 pt-6 border-t border-white/5 flex justify-between items-center font-mono text-[10px] text-neutral-600 uppercase">
                  <Link to="/auth/recover" className="hover:text-emerald-500 transition-colors">
-                   Reset_Key
+                   Forgot Password
                  </Link>
                  <Link to="/auth/register" className="hover:text-emerald-500 transition-colors">
-                   New_User_Protocol
+                   Create Account
                  </Link>
                </div>
 

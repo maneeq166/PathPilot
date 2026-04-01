@@ -32,35 +32,35 @@ const HeroSection = () => {
           </div>
 
           <h1 className="font-mono text-5xl md:text-7xl font-light tracking-tighter leading-[0.9]">
-            RESUME <br/>
-            <span className="font-bold text-white">INTELLIGENCE</span> <br/>
-            <span className="text-gray-500">PROTOCOL</span>
+            YOUR <br/>
+            <span className="font-bold text-white">CAREER</span> <br/>
+            <span className="text-gray-500">COMPASS</span>
           </h1>
 
           <div className="space-y-4 max-w-md font-sans text-gray-400 text-lg leading-relaxed">
             <p>
-              <strong className="text-white">PathPilot</strong> ingests your professional history, extracts key competency vectors, and algorithmically matches your profile to high-probability roles.
+              <strong className="text-white">PathPilot</strong> analyzes your resume, extracts your skills, and finds the best job matches for you.
             </p>
             <ul className="space-y-2 font-mono text-sm text-gray-500 border-t border-gray-800 pt-4 mt-4">
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> PARSE PDF/DOCX STRUCTURE
+                <span className="text-green-500">✓</span> Parse Resume (PDF/DOCX)
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> EXTRACT SKILL ENTITIES
+                <span className="text-green-500">✓</span> Extract Skills
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> CALCULATE ROLE FIT SCORE
+                <span className="text-green-500">✓</span> Find Best Matches
               </li>
             </ul>
           </div>
 
           <div className="mt-8">
             <button className="group relative px-8 py-4 bg-white text-black font-mono font-bold text-sm uppercase tracking-wider overflow-hidden">
-              <span className="relative z-10 group-hover:text-white transition-colors duration-300">Initiate Analysis</span>
+              <span className="relative z-10 group-hover:text-white transition-colors duration-300">Get Started</span>
               <div className="absolute inset-0 bg-green-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </button>
             <p className="mt-3 font-mono text-[10px] text-gray-600">
-              * SECURE UPLOAD ENCRYPTED VIA AES-256
+              * Files are encrypted for security
             </p>
           </div>
         </motion.div>
@@ -114,7 +114,7 @@ const AnalysisTerminal = () => {
           <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
           <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
         </div>
-        <div className="text-gray-500">user_resume.pdf — Analysis</div>
+        <div className="text-gray-500">user_resume.pdf — Resume Analysis</div>
       </div>
 
       {/* Main Content Area */}
@@ -129,32 +129,32 @@ const AnalysisTerminal = () => {
                     <div className="text-gray-600">1.4 MB • Uploaded</div>
                 </div>
             </div>
-            <div className="text-green-500 animate-pulse">● PROCESSING</div>
+            <div className="text-green-500 animate-pulse">● Analyzing</div>
         </div>
 
         {/* Process Steps */}
         <div className="space-y-4">
             <ProcessItem 
-                label="TEXT_PARSING" 
-                status={step >= 1 ? "COMPLETE" : "PENDING"} 
+                label="Reading File" 
+                status={step >= 1 ? "DONE" : "WAITING"} 
                 active={step === 0}
                 delay={0}
             />
             <ProcessItem 
-                label="ENTITY_EXTRACTION (SKILLS)" 
-                status={step >= 2 ? "COMPLETE" : step === 1 ? "RUNNING..." : "WAITING"} 
+                label="Extracting Skills" 
+                status={step >= 2 ? "DONE" : step === 1 ? "Running..." : "WAITING"} 
                 active={step === 1}
                 delay={0.2}
             />
             <ProcessItem 
-                label="EXPERIENCE_NORMALIZATION" 
-                status={step >= 3 ? "COMPLETE" : step === 2 ? "RUNNING..." : "WAITING"} 
+                label="Processing Experience" 
+                status={step >= 3 ? "DONE" : step === 2 ? "Running..." : "WAITING"} 
                 active={step === 2}
                 delay={0.4}
             />
              <ProcessItem 
-                label="ROLE_ALIGNMENT_VECTOR" 
-                status={step >= 4 ? "COMPLETE" : step === 3 ? "CALCULATING..." : "WAITING"} 
+                label="Finding Matches" 
+                status={step >= 4 ? "DONE" : step === 3 ? "Calculating..." : "WAITING"} 
                 active={step === 3}
                 delay={0.6}
             />
@@ -168,7 +168,7 @@ const AnalysisTerminal = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     className="bg-black/50 border border-gray-800 p-3 mt-2"
                 >
-                    <div className="text-gray-500 mb-2">// EXTRACTED_TOKENS</div>
+                    <div className="text-gray-500 mb-2">// Extracted Skills</div>
                     <div className="flex flex-wrap gap-2">
                         {['React', 'Node.js', 'System Design', 'TypeScript', 'AWS'].map((skill, i) => (
                             <motion.span 
@@ -196,12 +196,12 @@ const AnalysisTerminal = () => {
                 >
                     <div className="flex justify-between items-end">
                         <div>
-                            <div className="text-gray-500 text-[10px] uppercase mb-1">Target Role Identified</div>
+                            <div className="text-gray-500 text-[10px] uppercase mb-1">Recommended Role</div>
                             <div className="text-xl text-white font-bold">SENIOR FRONTEND ENGINEER</div>
                         </div>
                         <div className="text-right">
                              <div className="text-3xl font-bold text-green-400">{step >= 4 ? 94 : score}%</div>
-                             <div className="text-[10px] text-green-600 uppercase">Match Confidence</div>
+                             <div className="text-[10px] text-green-600 uppercase">Match Score</div>
                         </div>
                     </div>
                     

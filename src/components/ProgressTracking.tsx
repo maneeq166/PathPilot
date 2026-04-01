@@ -7,42 +7,42 @@ import { cn } from "@/lib/utils";
 const timelineEvents = [
   {
     id: "LOG_001",
-    event: "INITIAL_RESUME_UPLOAD",
+    event: "Resume Uploaded",
     date: "2023-10-12 09:42:00",
     score: 42,
-    details: "Raw data ingestion. Structure unstructured. Keywords missing.",
-    status: "ANALYZED",
+    details: "Resume uploaded. Skills and experience extracted.",
+    status: "DONE",
   },
   {
     id: "LOG_002",
-    event: "MOCK_INTERVIEW_SESSION_1",
+    event: "Mock Interview",
     date: "2023-10-14 14:20:15",
     score: 55,
-    details: "Voice telemetry captured. Filler words detected. Pace adjustment needed.",
-    status: "PROCESSED",
+    details: "Interview practice completed. Areas for improvement identified.",
+    status: "DONE",
   },
   {
     id: "LOG_003",
-    event: "SKILL_GAP_OPTIMIZATION",
+    event: "Skills Improved",
     date: "2023-10-18 11:05:33",
     score: 68,
-    details: "Market vector alignment. Missing entities injected. Syntax corrected.",
-    status: "OPTIMIZED",
+    details: "Missing skills identified and recommendations provided.",
+    status: "DONE",
   },
   {
     id: "LOG_004",
-    event: "MOCK_INTERVIEW_SESSION_5",
+    event: "Mock Interview #5",
     date: "2023-10-25 16:45:00",
     score: 84,
-    details: "Confidence metric varied. Clarity high. Response structure optimal.",
-    status: "VALIDATED",
+    details: "Confidence improved. Ready for real interviews.",
+    status: "DONE",
   },
   {
     id: "LOG_005",
-    event: "FINAL_RESUME_COMPILE",
+    event: "Resume Finalized",
     date: "2023-11-01 08:30:00",
     score: 92,
-    details: "ATS Compliance: 100%. Role match probability maximized.",
+    details: "Resume optimized. ATS score: 92%.",
     status: "READY",
   },
 ];
@@ -76,54 +76,53 @@ export function ProgressTracking() {
         
         {/* Left Column: Context & Typography */}
         <div className="flex flex-col justify-center lg:sticky lg:top-24 h-fit">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-3 mb-6"
-          >
-             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-             <span className="font-mono text-xs text-emerald-500 uppercase tracking-widest">
-               System_Log_v2.4
-             </span>
-          </motion.div>
+           <motion.div 
+             initial={{ opacity: 0, x: -20 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true }}
+             className="flex items-center gap-3 mb-6"
+           >
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="font-mono text-xs text-emerald-500 uppercase tracking-widest">
+               Progress Tracker
+              </span>
+           </motion.div>
 
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.9] text-white tracking-tighter mb-8"
-          >
-            INTELLIGENCE <br />
-            <span className="text-gray-600">EVOLUTION</span> <br />
-            TIMELINE
-          </motion.h2>
+           <motion.h2 
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.1 }}
+             className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.9] text-white tracking-tighter mb-8"
+           >
+             YOUR <br />
+             <span className="text-gray-600">CAREER</span> <br />
+             PROGRESS
+           </motion.h2>
 
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="font-mono text-sm text-gray-400 space-y-6 max-w-md border-l border-gray-800 pl-6"
-          >
-            <p>
-              PathPilot is not static. It is a longitudinal tracking system. 
-              We store every resume version, interview transcript, and match result 
-              to visualize your career readiness trajectory.
-            </p>
-            <ul className="space-y-2 text-xs uppercase tracking-wide text-gray-500">
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">[✓]</span> Version Control
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">[✓]</span> Delta Analysis
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">[✓]</span> Predictive Scoring
-              </li>
-            </ul>
-          </motion.div>
+           <motion.div 
+             initial={{ opacity: 0 }}
+             whileInView={{ opacity: 1 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.2 }}
+             className="font-mono text-sm text-gray-400 space-y-6 max-w-md border-l border-gray-800 pl-6"
+           >
+             <p>
+               Track your career journey with PathPilot. We save every resume version, 
+               interview practice session, and skill improvement to help you reach your goals.
+             </p>
+             <ul className="space-y-2 text-xs uppercase tracking-wide text-gray-500">
+               <li className="flex items-center gap-2">
+                 <span className="text-emerald-500">[✓]</span> Resume Versions
+               </li>
+               <li className="flex items-center gap-2">
+                 <span className="text-emerald-500">[✓]</span> Progress Tracking
+               </li>
+               <li className="flex items-center gap-2">
+                 <span className="text-emerald-500">[✓]</span> Skill Improvements
+               </li>
+             </ul>
+           </motion.div>
         </div>
 
         {/* Right Column: Timeline Visualization */}

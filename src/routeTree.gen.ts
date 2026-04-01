@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UploadIndexRouteImport } from './routes/upload/index'
+import { Route as JobsIndexRouteImport } from './routes/jobs/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
@@ -25,6 +27,16 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadIndexRoute = UploadIndexRouteImport.update({
+  id: '/upload/',
+  path: '/upload/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsIndexRoute = JobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -61,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/jobs': typeof JobsIndexRoute
+  '/upload': typeof UploadIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +84,8 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/jobs': typeof JobsIndexRoute
+  '/upload': typeof UploadIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/upload/': typeof UploadIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/settings'
     | '/dashboard'
+    | '/jobs'
+    | '/upload'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/settings'
     | '/dashboard'
+    | '/jobs'
+    | '/upload'
   id:
     | '__root__'
     | '/'
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/settings'
     | '/dashboard/'
+    | '/jobs/'
+    | '/upload/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +143,8 @@ export interface RootRouteChildren {
   AuthRegisterRoute: typeof AuthRegisterRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  JobsIndexRoute: typeof JobsIndexRoute
+  UploadIndexRoute: typeof UploadIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -135,6 +161,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload/': {
+      id: '/upload/'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/': {
+      id: '/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -183,6 +223,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRegisterRoute: AuthRegisterRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  JobsIndexRoute: JobsIndexRoute,
+  UploadIndexRoute: UploadIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
