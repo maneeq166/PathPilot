@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 
 // Font used: IBM Plex Mono (Technical/Code), IBM Plex Sans (UI/Human)
 
@@ -43,13 +44,13 @@ const HeroSection = () => {
             </p>
             <ul className="space-y-2 font-mono text-sm text-gray-500 border-t border-gray-800 pt-4 mt-4">
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> Parse Resume (PDF/DOCX)
+                <CheckCircle2 className="h-4 w-4 text-green-500" /> Parse Resume (PDF/DOCX)
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> Extract Skills
+                <CheckCircle2 className="h-4 w-4 text-green-500" /> Extract Skills
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-green-500">✓</span> Find Best Matches
+                <CheckCircle2 className="h-4 w-4 text-green-500" /> Find Best Matches
               </li>
             </ul>
           </div>
@@ -129,7 +130,10 @@ const AnalysisTerminal = () => {
                     <div className="text-gray-600">1.4 MB • Uploaded</div>
                 </div>
             </div>
-            <div className="text-green-500 animate-pulse">● Analyzing</div>
+            <div className="text-green-500 flex items-center gap-2">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              <span className="animate-pulse">Analyzing</span>
+            </div>
         </div>
 
         {/* Process Steps */}

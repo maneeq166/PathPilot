@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Font used: Space Grotesk (Display), JetBrains Mono (Data)
@@ -111,15 +112,15 @@ export function ProgressTracking() {
                Track your career journey with PathPilot. We save every resume version, 
                interview practice session, and skill improvement to help you reach your goals.
              </p>
-             <ul className="space-y-2 text-xs uppercase tracking-wide text-gray-500">
+              <ul className="space-y-2 text-xs uppercase tracking-wide text-gray-500">
                <li className="flex items-center gap-2">
-                 <span className="text-emerald-500">[✓]</span> Resume Versions
+                 <CheckCircle2 className="h-3 w-3 text-emerald-500" /> Resume Versions
                </li>
                <li className="flex items-center gap-2">
-                 <span className="text-emerald-500">[✓]</span> Progress Tracking
+                 <CheckCircle2 className="h-3 w-3 text-emerald-500" /> Progress Tracking
                </li>
                <li className="flex items-center gap-2">
-                 <span className="text-emerald-500">[✓]</span> Skill Improvements
+                 <CheckCircle2 className="h-3 w-3 text-emerald-500" /> Skill Improvements
                </li>
              </ul>
            </motion.div>

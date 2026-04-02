@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, CheckCircle2, Link2, Search } from "lucide-react";
 import { scrapeJobs } from "@/apis/api";
 import { Button } from "@/components/ui/button";
 
@@ -53,7 +54,7 @@ const JobCard = ({ job, index }: { job: Job; index: number }) => {
           <div className={`font-mono text-[10px] uppercase tracking-widest px-2 py-1 border ${
             isLinkedIn ? "text-blue-400 bg-blue-500/10 border-blue-500/20" : "text-cyan-500 bg-cyan-500/10 border-cyan-500/20"
           }`}>
-            {isLinkedIn && <span className="mr-1">🔗</span>}
+            {isLinkedIn && <Link2 className="mr-1 h-3 w-3 inline-block" />}
             {job.source || "Unknown"}
           </div>
           {matchScore && (
@@ -116,7 +117,12 @@ const JobCard = ({ job, index }: { job: Job; index: number }) => {
       {/* Action Footer */}
       <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
         <div className={`font-mono text-[10px] ${(matchScore?.overall ?? 0) >= 70 ? "text-emerald-400" : "text-slate-600"} uppercase tracking-widest`}>
-          {(matchScore?.overall ?? 0) >= 70 ? "✓ Great Match" : "Partial Match"}
+          {(matchScore?.overall ?? 0) >= 70 ? (
+            <span className="inline-flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" />
+              Great Match
+            </span>
+          ) : "Partial Match"}
         </div>
         {job.job_url ? (
           <a
@@ -128,7 +134,7 @@ const JobCard = ({ job, index }: { job: Job; index: number }) => {
             }`}
           >
             [ Apply ]
-            <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+            <ArrowRight className="h-3 w-3 transition-transform group-hover/btn:translate-x-1" />
           </a>
         ) : (
           <span className="font-mono text-[10px] text-slate-600 uppercase">NO_URL_PROVIDED</span>
@@ -155,6 +161,14 @@ function RouteComponent() {
   const [summary, setSummary] = useState<JobSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const linkedinJobs = useMemo(
+    () => jobs.filter((job) => job.source?.toLowerCase() === "linkedin").slice(0, 2),
+    [jobs]
+  );
+  const otherJobs = useMemo(
+    () => jobs.filter((job) => job.source?.toLowerCase() !== "linkedin"),
+    [jobs]
+  );
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -293,7 +307,7 @@ function RouteComponent() {
                 ) : (
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     Search Jobs
-                    <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                    <ArrowRight className="h-3 w-3 transition-transform group-hover/btn:translate-x-1" />
                   </span>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
@@ -347,7 +361,7 @@ function RouteComponent() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               className="w-full py-20 flex flex-col items-center justify-center border border-dashed border-white/10 bg-white/[0.01]"
             >
-              <div className="font-mono text-4xl text-slate-800 mb-4">⬡</div>
+              <Search className="h-10 w-10 text-slate-700 mb-4" />
               <p className="font-mono text-sm text-slate-500 uppercase tracking-widest">
                 {query ? "NO JOBS FOUND" : "ENTER A SEARCH TERM"}
               </p>
@@ -382,7 +396,8 @@ function RouteComponent() {
                 <div className="flex items-center gap-2">
                   {summary.bySource["LinkedIn"] && (
                     <span className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-mono">
-                      🔗 {summary.bySource["LinkedIn"]} LinkedIn
+                      <Link2 className="h-3 w-3" />
+                      {summary.bySource["LinkedIn"]} LinkedIn
                     </span>
                   )}
                   {summary.bySource["JSearch"] && (
@@ -407,10 +422,27 @@ function RouteComponent() {
             </motion.div>
           )}
 
+          {/* LinkedIn Picks */}
+          {linkedinJobs.length > 0 && (
+            <div className="mb-10">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                <span className="font-mono text-[10px] text-blue-400 tracking-[0.3em] uppercase">
+                  LinkedIn Picks
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+                {linkedinJobs.map((job, i) => (
+                  <JobCard key={`linkedin-${job.job_url || job.job_title}-${i}`} job={job} index={i} />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Jobs Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-            {jobs.map((job, i) => (
-              <JobCard key={`${job.job_url || job.job_title}-${i}`} job={job} index={i} />
+            {otherJobs.map((job, i) => (
+              <JobCard key={`${job.job_url || job.job_title}-${i}`} job={job} index={i + linkedinJobs.length} />
             ))}
           </div>
         </div>

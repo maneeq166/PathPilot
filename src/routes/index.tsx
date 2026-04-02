@@ -1,5 +1,6 @@
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { motion, useMotionTemplate, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
+import { CheckCircle2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -134,7 +135,10 @@ function ResumeIntelligence() {
   "ats_score": 88
 }`}
              </pre>
-             <div className="absolute bottom-4 right-4 text-green-500 animate-pulse">● PARSED</div>
+             <div className="absolute bottom-4 right-4 text-green-500 animate-pulse flex items-center gap-2">
+               <CheckCircle2 className="h-3 w-3" />
+               <span>PARSED</span>
+             </div>
            </div>
            {/* Overlapping Element */}
            <motion.div 

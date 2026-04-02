@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -114,9 +115,7 @@ export function FinalCTA() {
                   Unlock_Score
                 </span>
               </div>
-              <div className="ml-8 text-2xl group-hover:translate-x-2 transition-transform duration-300">
-                →
-              </div>
+              <ArrowRight className="ml-8 h-6 w-6 group-hover:translate-x-2 transition-transform duration-300" />
             </Button>
           </a>
         </motion.div>
